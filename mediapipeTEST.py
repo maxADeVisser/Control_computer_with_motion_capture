@@ -2,8 +2,12 @@ import cv2
 import mediapipe as mp
 import pyautogui, sys
 import numpy as np
+import time
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
+window_size_x = 1280
+window_size_y = 800
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
@@ -11,7 +15,6 @@ with mp_hands.Hands(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as hands:
   while cap.isOpened():
-    # pyautogui.FAILSAFE = False
     success, image = cap.read()
     if not success:
       print("Ignoring empty camera frame.")
@@ -38,20 +41,29 @@ with mp_hands.Hands(
           f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x}, '
           f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y})'
       )  """
-      pyautogui.moveTo(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * 1280, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * 800)
-      
-      index_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
-      index_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
 
+      #Makes the mouse move
+      pyautogui.moveTo(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].x * window_size_x, hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].y * window_size_y)
+      
+      #Euclidean distance index finger tip
+      # index_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
+      # index_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
+
+      #Euclidean distance thumb tip
       thumb_posX = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x
-      thumb_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
+      thumb_posY = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y
 
-      index_finger = np.array((index_finger_posX, index_finger_posY))
+      # Euchlidean distance index finger mcp
+      index_finger_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x
+      index_finger_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y
+
+      #index_finger = np.array((index_finger_posX, index_finger_posY))
       thumb = np.array((thumb_posX, thumb_posY))
+      index_finger_mcp = np.array((index_finger_mcp_posX, index_finger_mcp_posY))
       
-      dist = np.linalg.norm(index_finger - thumb)
+      dist = np.linalg.norm(thumb - index_finger_mcp)
       print(dist)
-      click = 0.001
+      click = 0.04
       if dist < click:
         pyautogui.click() 
         print('Click')
