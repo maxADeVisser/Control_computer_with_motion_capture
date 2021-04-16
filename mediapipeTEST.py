@@ -3,6 +3,7 @@ import mediapipe as mp
 import pyautogui, sys
 import numpy as np
 import time #only used to make a break in between printing the coordinates of the fingers
+from scipy.spatial import distance
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -47,34 +48,36 @@ with mp_hands.Hands(
       )  """
 
       #Makes the mouse move
-      pyautogui.moveTo(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].x * 
-      window_size_x, hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].y * window_size_y)
+      thumb_cmc_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].x, 3) 
+      thumb_cmc_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].y, 3)
+
+      pyautogui.moveTo(thumb_cmc_posX * window_size_x, thumb_cmc_posY * window_size_y)
       
       # #Euclidean distance index finger tip
-      # index_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
-      # index_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
+      index_finger_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, 3)
+      index_finger_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y, 3)
 
       # #Euclidean distance thumb tip
-      # thumb_posX = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x
-      # thumb_posY = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y
+      thumb_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x, 3)
+      thumb_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y, 3)
 
       # #Euclidean distance index finger mcp
-      # index_finger_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x
-      # index_finger_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y
+      index_finger_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x, 3)
+      index_finger_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y, 3)
 
       # #Euchlidean distiance pinky mcp
-      # pinky_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x
-      # pinky_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y
+      pinky_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x, 3)
+      pinky_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y, 3)
 
-      index_finger = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y))
-      thumb = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x,hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y))
-      index_finger_mcp = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y))
-      pinky_mcp = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x, hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y))
+      # index_finger = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y))
+      # thumb = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x,hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y))
+      # index_finger_mcp = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y))
+      # pinky_mcp = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x, hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y))
 
-      index_finger_rounded = np.round(index_finger, 2)
-      thumb_rounded = np.round(thumb, 2)
-      index_finger_mcp_rounded = np.round(index_finger_mcp, 2)
-      pinky_mcp_rounded = np.round(pinky_mcp, 2)
+      # index_finger_rounded = np.round(index_finger, 2)
+      # thumb_rounded = np.round(thumb, 2)
+      # index_finger_mcp_rounded = np.round(index_finger_mcp, 2)
+      # pinky_mcp_rounded = np.round(pinky_mcp, 2)
 
       # index_finger = np.around([hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x], decimals= 3), np.around([hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y], decimals= 3)
       # thumb = np.around([hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x], decimals= 3), np.around([hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y], decimals= 3)
@@ -89,9 +92,9 @@ with mp_hands.Hands(
 
       
 
-      # click functionalitet
-      #Click 
-      left_click_dist = np.linalg.norm(thumb - index_finger_mcp)
+      # Left click 
+      #left_click_dist = np.linalg.norm(thumb - index_finger_mcp)
+      left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
       left_click = 0.04
       #print(left_click_dist)
       if left_click_dist < left_click:
@@ -100,21 +103,23 @@ with mp_hands.Hands(
 
 
       # Right click
-      right_click_dist = np.linalg.norm(thumb - pinky_mcp)
+      # right_click_dist = np.linalg.norm(thumb - pinky_mcp)
+      right_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
       right_click = 0.04
       if right_click_dist < right_click:
-        #pyautogui.click(button = 'right')
+        pyautogui.click(button = 'right')
         print('Right click')
   
       # Mouse drag  
-      drag_dist = np.linalg.norm(index_finger_mcp - index_finger_mcp)
+      #drag_dist = np.linalg.norm(index_finger - index_finger_mcp)
+      drag_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
       # print(drag_dist)
       drag = 0.05
-      # if drag_dist > drag:
-      #   pyautogui.mouseUp()
-      # if drag_dist < drag:
-      #   pyautogui.mouseDown()
-      #   print('Drag')
+      if drag_dist > drag:
+        pyautogui.mouseUp()
+      if drag_dist < drag:
+        pyautogui.mouseDown()
+        print('Drag')
       
 
     # cv2.imshow('MediaPipe Hands', image)
