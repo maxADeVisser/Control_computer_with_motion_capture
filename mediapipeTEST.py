@@ -8,18 +8,24 @@ from scipy.spatial import distance
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
-window_size_x = screen_size[0] 
-window_size_y = screen_size[1]
+#screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
+#window_size_x = screen_size[0] 
+#window_size_y = screen_size[1]
+
+window_size_x = 1280 
+window_size_y = 800  
+
 
 # For webcam input:
 cap = cv2.VideoCapture(0) #initiates the webcam for use (0 = inbuild camera)
+
 with mp_hands.Hands(
     max_num_hands = 1,
     min_detection_confidence = 0.5,
-    min_tracking_confidence = 0.5) as hands:
+    min_tracking_confidence = 0.1) as hands:
 
   while cap.isOpened():
+   
     success, image = cap.read()
     if not success:
       print("Ignoring empty camera frame.")
@@ -35,17 +41,20 @@ with mp_hands.Hands(
     results = hands.process(image)
 
     # Draw the hand annotations on the image.
-    image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
         mp_drawing.draw_landmarks(
             image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+          
             
       #Makes the mouse move
-      thumb_cmc_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].x, 3) 
-      thumb_cmc_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_CMC].y, 3) 
-      pyautogui.moveTo(thumb_cmc_posX * window_size_x, thumb_cmc_posY * window_size_y)
+      mouseX_offset = window_size_x * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2)
+      mouseY_offset = window_size_y * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2)
+
+      middle_finger_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x, 3) * mouseX_offset
+      middle_finger_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y, 3) * mouseY_offset
+      pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1)
       
       # Euclidean distance index finger tip
       index_finger_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, 3)
@@ -83,15 +92,21 @@ with mp_hands.Hands(
       right_click = 0.1
       # print (right_click_dist)
       if right_click_dist > right_click:
-        pyautogui.click(button = 'right')
-        print('Right click')
+        for i in range (0, 2):
+          pyautogui.keyDown('command')
+          pyautogui.keyUp('command')
+          time.sleep(0.1)
+
+
+        # pyautogui.click(button = 'right')
+        # print('Right click')
   
-      # # Mouse drag  
+      # Mouse drag  
       # drag_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
       # print(drag_dist)
       # drag = 0.05
       # if drag_dist < drag:
-      #   pyautogui.dragTo(thumb_cmc_posX * window_size_x, thumb_cmc_posX * window_size_y, button='left')
+      #   pyautogui.drag(button='left')
       #   print('Drag')
       
     
@@ -100,10 +115,6 @@ with mp_hands.Hands(
     if cv2.waitKey(5) & 0xFF == 27:
       break
 
-for i in range (0, 2):
-  pyautogui.keyDown('command')
-  pyautogui.keyUp('command')
-  time.sleep(0.1)
+
   
-    
 cap.release()
