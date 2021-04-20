@@ -4,6 +4,11 @@ import pyautogui, sys
 import numpy as np
 import time #only used to make a break in between printing the coordinates of the fingers
 from scipy.spatial import distance
+import logging as log
+
+#logging format
+log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests every time we restart the program
+#log.basicConfig(filename='Kopi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes log file that saves the log from previous runs of our program
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -84,6 +89,8 @@ with mp_hands.Hands(
       if left_click_dist < left_click:
         pyautogui.click() 
         print('Left click')
+        log.warning (f'Left click registered! Click on X axis:{thumb_cmc_posX} Click on Y axis:{thumb_cmc_posY}') #Logs a click with coordinates
+
 
 
       # Right click
@@ -95,6 +102,7 @@ with mp_hands.Hands(
         for i in range (0, 2):
           pyautogui.keyDown('command')
           pyautogui.keyUp('command')
+          log.warning (f'Right click registered! Click on X axis:{thumb_cmc_posX} Click on Y axis:{thumb_cmc_posY}') #Logs a click with coordinates
           time.sleep(0.1)
 
 
