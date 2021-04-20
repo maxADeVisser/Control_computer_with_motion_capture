@@ -69,6 +69,10 @@ with mp_hands.Hands(
       pinky_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x, 3)
       pinky_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y, 3)
 
+      # Euchlidean distance middle finger tip
+      middle_finger_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].x, 3)
+      middle_finger_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y, 3)
+
       # index_finger = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y))
       # thumb = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x,hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y))
       # index_finger_mcp = np.array((hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x, hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y))
@@ -94,35 +98,36 @@ with mp_hands.Hands(
 
       # Left click 
       #left_click_dist = np.linalg.norm(thumb - index_finger_mcp)
-      left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
-      left_click = 0.04
-      #print(left_click_dist)
+      left_click_dist = round(distance.euclidean([thumb_posX, thumb_posX], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
+      left_click = 0.07
+      print (left_click_dist)
       if left_click_dist < left_click:
-        pyautogui.click() 
+        # pyautogui.click() 
         print('Left click')
 
 
       # Right click
       # right_click_dist = np.linalg.norm(thumb - pinky_mcp)
-      right_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
-      right_click = 0.04
-      if right_click_dist < right_click:
-        pyautogui.click(button = 'right')
+      right_click_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [middle_finger_posX, middle_finger_posY]), 3)
+      right_click = 0.1
+      #print (right_click_dist)
+      if right_click_dist > right_click:
+        # pyautogui.click(button = 'right')
         print('Right click')
   
-      # Mouse drag  
-      #drag_dist = np.linalg.norm(index_finger - index_finger_mcp)
-      drag_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
-      # print(drag_dist)
-      drag = 0.05
-      if drag_dist > drag:
-        pyautogui.mouseUp()
-      if drag_dist < drag:
-        pyautogui.mouseDown()
-        print('Drag')
+      # # Mouse drag  
+      # #drag_dist = np.linalg.norm(index_finger - index_finger_mcp)
+      # drag_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
+      # # print(drag_dist)
+      # drag = 0.05
+      # if drag_dist > drag:
+      #   pyautogui.mouseUp()
+      # if drag_dist < drag:
+      #   pyautogui.mouseDown()
+      #   print('Drag')
       
 
-    # cv2.imshow('MediaPipe Hands', image)
+    cv2.imshow('MediaPipe Hands', image)
     
     if cv2.waitKey(5) & 0xFF == 27:
       break
