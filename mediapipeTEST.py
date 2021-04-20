@@ -59,7 +59,7 @@ with mp_hands.Hands(
 
       middle_finger_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x, 3) * mouseX_offset
       middle_finger_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y, 3) * mouseY_offset
-      pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1)
+      pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
       
       # Euclidean distance index finger tip
       index_finger_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, 3)
@@ -89,7 +89,7 @@ with mp_hands.Hands(
       if left_click_dist < left_click:
         pyautogui.click() 
         print('Left click')
-        log.warning (f'Left click registered! Click on X axis:{thumb_cmc_posX} Click on Y axis:{thumb_cmc_posY}') #Logs a click with coordinates
+        log.warning (f'Left click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
 
 
 
@@ -102,7 +102,7 @@ with mp_hands.Hands(
         for i in range (0, 2):
           pyautogui.keyDown('command')
           pyautogui.keyUp('command')
-          log.warning (f'Right click registered! Click on X axis:{thumb_cmc_posX} Click on Y axis:{thumb_cmc_posY}') #Logs a click with coordinates
+          log.warning (f'Right click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
           time.sleep(0.1)
 
 
