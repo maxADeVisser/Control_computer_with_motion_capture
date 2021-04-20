@@ -15,9 +15,9 @@ mp_hands = mp.solutions.hands
 
 #screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
 #window_size_x = screen_size[0] 
-#window_size_y = screen_size[1]
+#window_size_y = screen_size[1] 
 
-window_size_x = 1280 
+window_size_x = 1280 # in the final version, remove this and use the code above to fix the windowsize
 window_size_y = 800  
 
 
@@ -46,21 +46,22 @@ with mp_hands.Hands(
     results = hands.process(image)
 
     # Draw the hand annotations on the image.
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) #converts frames to from RGB to BGR
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
         mp_drawing.draw_landmarks(
             image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
           
             
-      #Makes the mouse move
-      mouseX_offset = window_size_x * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2)
+      #move the mouse
+      mouseX_offset = window_size_x * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2) # It's the multiplication of 2 that makes the program able to reach the corners
       mouseY_offset = window_size_y * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2)
 
       middle_finger_mcp_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x, 3) * mouseX_offset
       middle_finger_mcp_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y, 3) * mouseY_offset
       pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
       
+    
       # Euclidean distance index finger tip
       index_finger_posX = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x, 3)
       index_finger_posY = round(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y, 3)
