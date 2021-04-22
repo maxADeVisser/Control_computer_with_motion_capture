@@ -1,6 +1,6 @@
 # IDS---Spring-2021---Hand-In-2
 # Hand vs mouse is a porgram that allows for hands free control of your computer 
-# It utilizes mediapipe hands, pyautogui and OpenCV
+It utilizes mediapipe hands, pyautogui and OpenCV
 #
 # Usage
 ### Make sure you have MediaPipe, PyAtuoGUI and OpenCV installed. 
