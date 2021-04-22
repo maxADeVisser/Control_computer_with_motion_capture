@@ -1,5 +1,5 @@
 # NAME OF PROJECT
-# Created by: Sebastian Rohr, William Dyrnesli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Max de Visser
+# Created by: Sebastian Rohr, William Dyrensli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Max de Visser
 
 # ---------------------------------------SETUP------------------------------------------------
 
@@ -14,8 +14,8 @@ import logging as log
 log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests everytime the program is ran
 #log.basicConfig(filename='Kopi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #This line can be used instead if we want to make new logfiles each time
 
-mp_drawing = mp.solutions.drawing_utils # variable 
-mp_hands = mp.solutions.hands # a variable representing MediaPipes hand landmark model
+mp_drawing = mp.solutions.drawing_utils # the 'drawing' of the handdetection model. 
+mp_hands = mp.solutions.hands # initializing MediaPipes hand landmark model
 
 screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
 window_size_x = screen_size[0] # a variable to represent the screen width
@@ -23,7 +23,7 @@ window_size_y = screen_size[1] # a variable to represent the screen height
 # OBS.: PyAutoGui sees the screen as a cartesian coordinate-system with the origin (0,0) being the upper left corner
 
 
-# using OpenCV for webcam input:
+# using OpenCV for webcamera input:
 cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the inbuild camera). 
 #OBS.: If using an external webcamera, try different numbers (1, 2, 3 etc.)
 
@@ -37,22 +37,21 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False # MARTIN SKRIV HVAD DET HER ER SDLKDFJGDJFg
     
-    success, image = cap.read()
+    success, image = cap.read() # capture frame-by-frame
     if not success:
       print("Ignoring empty camera frame.")
-      # If loading a video, use 'break' instead of 'continue'.
       continue
 
-    # Flip the image horizontally for a later selfie-view display, and convert
-    # the BGR image to RGB.
-    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
+    # Flip the image horizontally for a later selfie-view display, and convert the BGR image to RGB.
+    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) #flips the image horizontally and converts the image from RGB to BGR 
     # To improve performance, optionally mark the image as not writeable to
     # pass by reference.
     image.flags.writeable = False
     results = hands.process(image)
 
     # Draw the hand annotations on the image.
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) #converts frames to from RGB to BGR
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) 
+    
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
         mp_drawing.draw_landmarks(
