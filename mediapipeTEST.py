@@ -1,5 +1,5 @@
 # NAME OF PROJECT
-# Created by: Sebastian Rohr, William Dyrensli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Max de Visser
+# Created by: Max de Visser, William Dyrnesli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Sebastian Rohr
 
 # ---------------------------------------SETUP------------------------------------------------
 
