@@ -12,4 +12,4 @@ pip3 install pyautogui
 ```
 ### Hold your hand hand aproximately 30 - 50 cm from your webcam/screen. Hold your hand like this: 
 
-![HandPosition](https://user-images.githubusercontent.com/70689092/115688042-11263480-a35b-11eb-998b-7a46e8718db4.jpg)
+![HandPosition](https://user-images.githubusercontent.com/70689092/115688165-2e5b0300-a35b-11eb-84f7-e81afb2f3934.jpg)
