@@ -16,4 +16,4 @@ pip3 install pyautogui
 
 ### To left click move your thumb all the way towards the bottom of your index finger like this: 
 
-![Leftclick](https://user-images.githubusercontent.com/70689092/115689411-57c85e80-a35c-11eb-9eb1-0f1e9d273682.gif)
+![Leftclick](https://user-images.githubusercontent.com/70689092/115689550-79294a80-a35c-11eb-8fb6-22644a50a375.gif)
