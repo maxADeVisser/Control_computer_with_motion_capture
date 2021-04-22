@@ -1,3 +1,8 @@
+# NAME OF PROJECT
+# Created by: Sebastian Rohr, William Dyrensli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Max de Visser
+
+# ---------------------------------------SETUP------------------------------------------------
+
 import cv2
 import mediapipe as mp
 import pyautogui, sys
@@ -22,13 +27,16 @@ window_size_y = screen_size[1] # a variable to represent the screen height
 cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the inbuild camera). 
 #OBS.: If using an external webcamera, try different numbers (1, 2, 3 etc.)
 
-with mp_hands.Hands( # with-statement ensures we handle possible exceptions
+# --------------------------------------MAIN LOOP-----------------------------------------------------
+
+with mp_hands.Hands( # with-statement ensures we handle possible exceptions thrown
     max_num_hands = 1, # Declares how many hands the model will track at once.
     min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
-
-  while cap.isOpened():
-    pyautogui.FAILSAFE = False
+    
+  while cap.isOpened(): # while the webcamera is running
+    pyautogui.FAILSAFE = False # MARTIN SKRIV HVAD DET HER ER SDLKDFJGDJFg
+    
     success, image = cap.read()
     if not success:
       print("Ignoring empty camera frame.")
