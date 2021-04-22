@@ -88,7 +88,7 @@ with mp_hands.Hands(
       pinky_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].y
 
       # Left click 
-      left_click_dist = distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY])
+      left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
       left_click = 0.07
       # print (left_click_dist)
       if left_click_dist < left_click:
