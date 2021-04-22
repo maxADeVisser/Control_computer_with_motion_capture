@@ -3,12 +3,11 @@
 
 # ---------------------------------------SETUP------------------------------------------------
 
-import cv2
 import mediapipe as mp
-import pyautogui, sys
-import time #only used to make a break in between printing the coordinates of the fingers
+import pyautogui, sys, cv2
 from scipy.spatial import distance
 import logging as log
+import speech_recognition as sr
 
 #logging format
 log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests everytime the program is ran
@@ -20,12 +19,13 @@ mp_hands = mp.solutions.hands # initializing MediaPipes hand landmark model
 screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
 window_size_x = screen_size[0] # a variable to represent the screen width
 window_size_y = screen_size[1] # a variable to represent the screen height
-# OBS.: PyAutoGui sees the screen as a cartesian coordinate-system with the origin (0,0) being the upper left corner
-
+# OBS: PyAutoGui sees the screen as a cartesian coordinate-system with the origin (0,0) being the upper left corner
 
 # using OpenCV for webcamera input:
-cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the inbuild camera). 
-#OBS.: If using an external webcamera, try different numbers (1, 2, 3 etc.)
+cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the build-in camera). 
+# OBS: If using an external webcamera, try different numbers (1, 2, 3 etc.)
+
+r = sr.Recognizer() # Initialize the speech-recognizer 
 
 # --------------------------------------MAIN LOOP-----------------------------------------------------
 
@@ -35,7 +35,7 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
     
   while cap.isOpened(): # while the webcamera is running
-    pyautogui.FAILSAFE = False # MARTIN SKRIV HVAD DET HER ER SDLKDFJGDJFg
+    pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
     
     success, image = cap.read() # capture frame-by-frame
     if not success:
@@ -66,7 +66,6 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
       middle_finger_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * mouseY_offset
       pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
       
-    
       # Index finger tip position
       index_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
       index_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
@@ -98,56 +97,86 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
       # Left click 
       left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
       left_click = 0.07
-      # print (left_click_dist)
       if left_click_dist < left_click:
         pyautogui.click() 
         print('Left click')
         log.warning (f'Left click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
 
-
-
-      # Right click
+      # Voice activation
       right_click_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [middle_finger_posX, middle_finger_posY]), 3)
       right_click = 0.1
-      # print (right_click_dist)
       if right_click_dist > right_click:
-        for i in range (0, 2):
-          pyautogui.keyDown('command')
-          pyautogui.keyUp('command')
-          log.warning (f'Right click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
-          time.sleep(0.1)
+        try:
+          # use the microphone as source for input.
+          with sr.Microphone() as source2:
+                
+            # wait for a second to let the recognizer
+            # adjust the energy threshold based on
+            # the surrounding noise level 
+            r.adjust_for_ambient_noise(source2, duration=0.01)
+              
+            #listens for the user's input 
+            print("Listening...")
+            audio2 = r.listen(source2)
+              
+            # Using google api to recognize audio
+            MyText = r.recognize_google(audio2, language="en-GB")
+            MyText = MyText.lower() # Lowercase letters only so we can detect words without running into capitalized letter problems
+            print(f"You said: '{MyText}'")
 
-  
-      # Mouse drag  
-      # drag_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
-      # print(drag_dist)
-      # drag = 0.05
-      # if drag_dist < drag:
-      #   pyautogui.drag(button='left')
-      #   print('Drag')
+            # If the full message is:
+            if MyText == "enter":
+              pyautogui.press('enter')
+            elif MyText == "delete":
+              pyautogui.hotkey('option','backspace')
+            elif MyText == "single delete":
+              pyautogui.press('backspace')
+            elif MyText == "clear":
+              pyautogui.hotkey('command', 'backspace')
+            elif MyText == "space":
+              pyautogui.press('space')
+            elif MyText == "exit" or MyText == "quit":
+              sys.exit()
+
+            # If the message contains:
+            elif "period" in MyText:
+              pyautogui.write(MyText) 
+              pyautogui.press('backspace', presses=6) #or 7 if said at the end of a sentence.
+              pyautogui.press('.')
+              
+            # Had to use "questionpoint", instead of question mark
+            # as that word is predetermined to always be "_"
+            # and therefore cant be changed.
+            elif 'questionpoint' in MyText:
+              pyautogui.write(MyText)
+              pyautogui.press('backspace', presses=14) #or 13 if said after the end of a sentence.
+              pyautogui.hotkey("shift","-") # American keyboard layout: _ = ?
+
+            else:
+              pyautogui.write(MyText)
+          
+        except sr.UnknownValueError:
+          print("Unknown error occured")
+
+        log.warning (f'Right click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
 
       # Scroll down
       scroll_down_dist = round(distance.euclidean([middle_finger_posX, middle_finger_posY], [ring_finger_tip_posX, ring_finger_tip_posY]), 3)
       scroll_down = 0.05
       if scroll_down_dist > scroll_down:
-        pyautogui.scroll(-10)
+        pyautogui.scroll(-5)
         print('Scroll down')
 
-      
       # Scroll up
       scroll_up_dist = round(distance.euclidean([ring_finger_tip_posX, ring_finger_tip_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
       # print(scroll_down_dist)
       scroll_up = 0.09
       if scroll_up_dist > scroll_up:
-        pyautogui.scroll(10)
+        pyautogui.scroll(5)
         print('Scroll up')
 
-      
-  
     # cv2.imshow('MediaPipe Hands', image)
     if cv2.waitKey(5) & 0xFF == 27:
       break
 
-
-  
 cap.release()
