@@ -1,5 +1,6 @@
 # IDS---Spring-2021---Hand-In-2
-# Hand vs mouse is a porgram that allows for hands free control of your computer 
+# Hand vs mouse is a program that allows for hands free control of your computer 
+
 
 ## Usage
 Make sure you have MediaPipe, PyAtuoGUI and OpenCV installed. 
