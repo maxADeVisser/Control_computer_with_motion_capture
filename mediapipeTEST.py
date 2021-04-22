@@ -6,25 +6,26 @@ from scipy.spatial import distance
 import logging as log
 
 #logging format
-log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests every time we restart the program
-#log.basicConfig(filename='Kopi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes log file that saves the log from previous runs of our program
+log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests everytime the program is ran
+#log.basicConfig(filename='Kopi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #This line can be used instead if we want to make new logfiles each time
 
-mp_drawing = mp.solutions.drawing_utils
-mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils # variable 
+mp_hands = mp.solutions.hands # a variable representing MediaPipes hand landmark model
 
 screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
-window_size_x = screen_size[0] 
-window_size_y = screen_size[1] 
+window_size_x = screen_size[0] # a variable to represent the screen width
+window_size_y = screen_size[1] # a variable to represent the screen height
+# OBS.: PyAutoGui sees the screen as a cartesian coordinate-system with the origin (0,0) being the upper left corner
 
 
+# using OpenCV for webcam input:
+cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the inbuild camera). 
+#OBS.: If using an external webcamera, try different numbers (1, 2, 3 etc.)
 
-# For webcam input:
-cap = cv2.VideoCapture(0) #initiates the webcam for use (0 = inbuild camera)
-
-with mp_hands.Hands(
-    max_num_hands = 1,
-    min_detection_confidence = 0.5,
-    min_tracking_confidence = 0.1) as hands:
+with mp_hands.Hands( # with-statement ensures we handle possible exceptions
+    max_num_hands = 1, # Declares how many hands the model will track at once.
+    min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
+    min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
 
   while cap.isOpened():
     pyautogui.FAILSAFE = False
