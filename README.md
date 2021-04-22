@@ -2,7 +2,6 @@
 # Hand vs mouse is a porgram that allows for hands free control of your computer 
 # It utilizes mediapipe hands and pyautogui
 #
-#
 # Usage
 ### Make sure you have mediapipe and pyatuogui installed. 
 ### Intstall using: 
