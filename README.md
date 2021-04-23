@@ -12,6 +12,8 @@ pip3 install mediapipe
 pip3 install pyautogui
 pip3 install opencv-python
 ```
+
+### Hand-commands
 Hold your hand hand aproximately 30 - 50 cm from your webcam/screen. This is your starting position: 
 
 ![HandPosition](https://user-images.githubusercontent.com/70689092/115688165-2e5b0300-a35b-11eb-84f7-e81afb2f3934.jpg)
@@ -31,3 +33,11 @@ To scroll up move your pinky away from your ring finger like this:
 To enter speech to text move your index finger away from your middle finger like this: 
 
 ![Speech](https://user-images.githubusercontent.com/70689092/115692333-2d2bd500-a35f-11eb-81ed-e3775c836bd4.gif)
+
+### Voice-commands
+Commands to use while speaking:
+                Question Point:
+                Period: 
+1) After speech to text activation, wait one second.
+2) Say what you want to type.
+3) Followed by what voice-command you need.
