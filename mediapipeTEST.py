@@ -38,24 +38,24 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
     
-    success, image = cap.read() # capture frame-by-frame
+    success, frame = cap.read() # capture frame-by-frame
     if not success: # error handling if capturing of a frame fails
       print("Ignoring empty camera frame.") 
       continue
 
-    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) # flips the image vertically and converts the image from BGR to RGB. This is because mediaPipe uses RGB values
-    image.flags.writeable = False # to improve performance we mark the image as not writeable to pass by reference
+    frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB) # flips the frame vertically and converts the frame from BGR to RGB. This is because mediaPipe uses RGB values
+    frame.flags.writeable = False # to improve performance we mark the frame as not writeable to pass by reference
     
-    results = hands.process(image) # processes a RGB image and returns the hand land marks detected in a tuple called 'multi_hand_landmarks'
+    results = hands.process(frame) # processes a RGB frame and returns the hand land marks detected in a tuple called 'multi_hand_landmarks'
 
     
-    # --- Draw the hand annotations on the image ---
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # we then convert the image back into BGR because openCV uses BGR
+    # --- Draw the hand annotations on the frame ---
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) # we then convert the frame back into BGR because openCV uses BGR
     
     if results.multi_hand_landmarks: # if the hand landmark model has found a hand                            
       for hand_landmarks in results.multi_hand_landmarks:       
         mp_drawing.draw_landmarks(                              
-            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
+            frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
      
       # ------------ GETTING POSITIONS USED -------------------
       # Middle finger mcp position
@@ -175,7 +175,7 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
         pyautogui.scroll(5) # scrolls up on the screen
         print('Scroll up')
 
-    # cv2.imshow('MediaPipe Hands', image) # shows the webcamera to the screen when the application is running
+    # cv2.imshow('MediaPipe Hands', frame) # shows the webcamera to the screen when the application is running
     
     if cv2.waitKey(5) & 0xFF == 27: # if the escape key is pressed, the application closes
       break
