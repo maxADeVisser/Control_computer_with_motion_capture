@@ -157,8 +157,6 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
         except sr.UnknownValueError:
           print("Unknown error occured")
 
-        log.warning (f'Right click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
-
       # Scroll down
       scroll_down_dist = round(distance.euclidean([middle_finger_posX, middle_finger_posY], [ring_finger_tip_posX, ring_finger_tip_posY]), 3)
       scroll_down = 0.05
@@ -168,7 +166,6 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
 
       # Scroll up
       scroll_up_dist = round(distance.euclidean([ring_finger_tip_posX, ring_finger_tip_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
-      # print(scroll_down_dist)
       scroll_up = 0.09
       if scroll_up_dist > scroll_up:
         pyautogui.scroll(5)
