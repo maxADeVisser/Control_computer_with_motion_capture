@@ -1,6 +1,8 @@
 # IDS---Spring-2021---Hand-In-2
 # Hand vs mouse is a program that allows for hands free control of your computer 
 
+## Purpose
+The aim with this project is to explore interacting with a computer through hand gesture
 
 ## Usage
 Make sure you have MediaPipe (and OpenCV), PyAutoGUI and PyAudio (if you want speech to text functionality) installed. 
