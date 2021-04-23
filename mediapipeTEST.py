@@ -2,7 +2,7 @@
 # The project was created for the exam handin for the course Interactive Digital System at Roskilde University
 # Created by: Max de Visser, William Dyrnesli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Sebastian Rohr
 
-# -----------------------------------SETUP--------------------------------------------
+# -----------------------------------SETUP-------------------------------------------- #
 
 import mediapipe as mp
 import pyautogui, sys, cv2
@@ -33,7 +33,7 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
     min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
     
-# --------------------------------MAIN LOOP----------------------------------------
+# --------------------------------MAIN LOOP---------------------------------------- #
 
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
@@ -111,7 +111,7 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
 
       # Voice activation functionality
       right_click_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [middle_finger_posX, middle_finger_posY]), 3)
-      right_click = 0.1 # threshhold
+      right_click = 0.1 # threshold
       if right_click_dist > right_click:
         try:
           with sr.Microphone() as source2: # use the microphone as source for input
@@ -147,7 +147,7 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
               pyautogui.press('backspace', presses=6) #or 7 if said at the end of a sentence.
               pyautogui.press('.')
               
-            # Had to use "questionpoint", instead of question mark as that word is predetermined to always be "_" and therefore cant be changed.
+            # Had to use "questionpoint", instead of "question mark" as that word is predetermined to always be "_" and therefore cant be changed.
             elif 'questionpoint' in MyText or 'question point ' in MyText:
               pyautogui.write(MyText)
               pyautogui.press('backspace', presses=14) #or 13 if said after the end of a sentence.
@@ -170,7 +170,6 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
 
       # Scroll up
       scroll_up_dist = round(distance.euclidean([ring_finger_tip_posX, ring_finger_tip_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
-      # print(scroll_down_dist)
       scroll_up = 0.09 # threshold 
       if scroll_up_dist > scroll_up:
         pyautogui.scroll(5) # scrolls up on the screen
