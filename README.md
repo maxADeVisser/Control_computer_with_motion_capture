@@ -32,20 +32,20 @@ To enter speech to text move your index finger away from your middle finger like
 ## Voice-commands
 Commands you can say:
                
-               ** Enter: **            Press enter
+                Enter:             Press enter
                 
-                **Delete:**            Delete one word
+                Delete:            Delete one word
                 
-                **Single delete:**     Delete one letter
+                Single delete:     Delete one letter
                 
-                **Clear:**             Delete one line
+                Clear:             Delete one line
                 
-                **Space:**             Press the space bar
+                Space:             Press the space bar
                 
-                **Exit:** or **Quit:** Close the program
+                Exit: or Quit: Close the program
 
 Commands you can use to type a symbol:
                 
-                **Question Point:**    Put a question mark at the end of the sentence.
+                Question Point:    Put a question mark at the end of the sentence.
                 
-                **Period:**            Put a dot at the end of the sentence.
+                Period:            Put a dot at the end of the sentence.
