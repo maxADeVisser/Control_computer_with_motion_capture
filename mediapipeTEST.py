@@ -1,4 +1,5 @@
-# NAME OF PROJECT
+# Controlling a computer through motioncapture
+# The project was created for the exam handin for the course Interactive Digital System at Roskilde University
 # Created by: Max de Visser, William Dyrnesli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Sebastian Rohr
 
 # ---------------------------------------SETUP------------------------------------------------
@@ -27,26 +28,23 @@ cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturi
 
 r = sr.Recognizer() # Initialize the speech-recognizer 
 
-# --------------------------------------MAIN LOOP-----------------------------------------------------
-
 with mp_hands.Hands( # with-statement ensures we handle possible exceptions thrown
     max_num_hands = 1, # Declares how many hands the model will track at once.
     min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
     
+  # ------------------------------MAIN LOOP-------------------------------------------
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
     
     success, image = cap.read() # capture frame-by-frame
-    if not success:
+    if not success: # error handling if capturing of a frame fails
       print("Ignoring empty camera frame.")
       continue
 
     # Flip the image horizontally for a later selfie-view display, and convert the BGR image to RGB.
-    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) #flips the image horizontally and converts the image from RGB to BGR 
-    # To improve performance, optionally mark the image as not writeable to
-    # pass by reference.
-    image.flags.writeable = False
+    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) #flips the image horizontally and converts the image from RGB to BGR. This is because openCV reads the colors of a pixel in the order BGR
+    image.flags.writeable = False # To improve performance, optionally mark the image as not writeable to pass by reference
     results = hands.process(image)
 
     # Draw the hand annotations on the image.
