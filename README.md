@@ -3,8 +3,8 @@
 
 
 ## Usage
-Make sure you have MediaPipe, PyAtuoGUI and OpenCV installed. 
-Install using: 
+Make sure you have MediaPipe (and OpenCV), PyAutoGUI and PyAudio (if you want speech to text functionality) installed. 
+Install by running the requirements.txt or by using the following commands in the commandline:
 ```
 pip3 install mediapipe
 pip3 install pyautogui
@@ -26,6 +26,6 @@ To scroll up move your pinky away from your ring finger like this:
 
 ![scrollUp](https://user-images.githubusercontent.com/70689092/115692164-05d50800-a35f-11eb-896e-e2cbec6a5a09.gif)
 
-To enter text to speech move your index finger away from your middle finger like this: 
+To enter speech to text move your index finger away from your middle finger like this: 
 
 ![Speech](https://user-images.githubusercontent.com/70689092/115692333-2d2bd500-a35f-11eb-81ed-e3775c836bd4.gif)
