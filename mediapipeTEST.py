@@ -2,7 +2,7 @@
 # The project was created for the exam handin for the course Interactive Digital System at Roskilde University
 # Created by: Max de Visser, William Dyrnesli Kristensen, Simon Hindsgaul, Martin Emil Daa Funder and Sebastian Rohr
 
-# ---------------------------------------SETUP------------------------------------------------
+# -----------------------------------SETUP--------------------------------------------
 
 import mediapipe as mp
 import pyautogui, sys, cv2
@@ -33,7 +33,8 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
     min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
     
-  # ------------------------------MAIN LOOP----------------------------------------
+# --------------------------------MAIN LOOP----------------------------------------
+
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
     
@@ -91,33 +92,31 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
         
       # --------------------- ACTIONS ------------------------
       # move the mouse
-      # NOTE.: we create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
       mouseX_offset = window_size_x * middle_finger_posX * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
       mouseY_offset = window_size_y * middle_finger_posY * 2 
+      # NOTE.: we create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
      
-      middle_finger_mcp_posX = middle_finger_posX * mouseX_offset
+      middle_finger_mcp_posX = middle_finger_posX * mouseX_offset 
       middle_finger_mcp_posY = middle_finger_posY * mouseY_offset
+        
       pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
 
-      # Left click 
+      # Left click functionality
       left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
-      left_click = 0.07
-      if left_click_dist < left_click:
+      left_click = 0.07 # threshhold
+      if left_click_dist < left_click: # if the euclidean distance is less than the threshold, invoke a click
         pyautogui.click() 
         print('Left click')
         log.warning (f'Left click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
 
-      # Voice activation
+      # Voice activation functionality
       right_click_dist = round(distance.euclidean([index_finger_posX, index_finger_posY], [middle_finger_posX, middle_finger_posY]), 3)
-      right_click = 0.1
+      right_click = 0.1 # threshhold
       if right_click_dist > right_click:
         try:
-          # use the microphone as source for input.
-          with sr.Microphone() as source2:
+          with sr.Microphone() as source2: # use the microphone as source for input
                 
-            # wait for a second to let the recognizer
-            # adjust the energy threshold based on
-            # the surrounding noise level 
+            # wait for a second to let the recognizer adjust the energy threshold based on the surrounding noise level 
             r.adjust_for_ambient_noise(source2, duration=0.01)
               
             #listens for the user's input 
@@ -125,13 +124,12 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
             audio2 = r.listen(source2)
               
             # Using google api to recognize audio
-            MyText = r.recognize_google(audio2, language="en-GB")
-            MyText = MyText.lower() # Lowercase letters only so we can detect words without running into capitalized letter problems
+            MyText = r.recognize_google(audio2, language="en-GB").lower() # Lowercase letters only so we can detect words without running into capitalized letter problems
             print(f"You said: '{MyText}'")
 
-            # If the full message is:
+            # Voice activation commands. If the full message is:
             if MyText == "enter":
-              pyautogui.press('enter')
+              pyautogui.press('enter') 
             elif MyText == "delete":
               pyautogui.hotkey('option','backspace')
             elif MyText == "single delete":
@@ -149,38 +147,36 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
               pyautogui.press('backspace', presses=6) #or 7 if said at the end of a sentence.
               pyautogui.press('.')
               
-            # Had to use "questionpoint", instead of question mark
-            # as that word is predetermined to always be "_"
-            # and therefore cant be changed.
-            elif 'questionpoint' in MyText:
+            # Had to use "questionpoint", instead of question mark as that word is predetermined to always be "_" and therefore cant be changed.
+            elif 'questionpoint' in MyText or 'question point ' in MyText:
               pyautogui.write(MyText)
               pyautogui.press('backspace', presses=14) #or 13 if said after the end of a sentence.
               pyautogui.hotkey("shift","-") # American keyboard layout: _ = ?
 
-            else:
+            else: # else write what was detected
               pyautogui.write(MyText)
           
         except sr.UnknownValueError:
           print("Unknown error occured")
 
-        log.warning (f'Right click registered! Click on X axis:{middle_finger_mcp_posX} Click on Y axis:{middle_finger_mcp_posY}') #Logs a click with coordinates
+        log.warning ('Speech recognizion activated') #Logs when speech recognizion is activated
 
       # Scroll down
       scroll_down_dist = round(distance.euclidean([middle_finger_posX, middle_finger_posY], [ring_finger_tip_posX, ring_finger_tip_posY]), 3)
-      scroll_down = 0.05
+      scroll_down = 0.05 # threshold
       if scroll_down_dist > scroll_down:
-        pyautogui.scroll(-5)
+        pyautogui.scroll(-5) # scrolls down on the screen
         print('Scroll down')
 
       # Scroll up
       scroll_up_dist = round(distance.euclidean([ring_finger_tip_posX, ring_finger_tip_posY], [pinky_mcp_posX, pinky_mcp_posY]), 3)
       # print(scroll_down_dist)
-      scroll_up = 0.09
+      scroll_up = 0.09 # threshold 
       if scroll_up_dist > scroll_up:
-        pyautogui.scroll(5)
+        pyautogui.scroll(5) # scrolls up on the screen
         print('Scroll up')
 
-    # cv2.imshow('MediaPipe Hands', image)
+    # cv2.imshow('MediaPipe Hands', image) # shows the webcamera to the screen when the application is running
     if cv2.waitKey(5) & 0xFF == 27:
       break
 
