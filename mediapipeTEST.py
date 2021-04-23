@@ -33,29 +33,30 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
     min_detection_confidence = 0.5, # a normalized value (0-1) that indicates how confident the model needs to be before considering detection of a hand succesfull
     min_tracking_confidence = 0.1) as hands: # a normalized value (0-1) that indicates how confident the models needs to be before considering tracking of hand landmarks succesfull. Otherwise, the model will automatically invoke handdetection on the next input frame
     
-  # ------------------------------MAIN LOOP-------------------------------------------
+  # ------------------------------MAIN LOOP----------------------------------------
   while cap.isOpened(): # while the webcamera is running
     pyautogui.FAILSAFE = False #Auto failsafe turned off, so that we can move the mouse to any of the corners, without closing the program
     
     success, image = cap.read() # capture frame-by-frame
     if not success: # error handling if capturing of a frame fails
-      print("Ignoring empty camera frame.")
+      print("Ignoring empty camera frame.") 
       continue
 
-    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) #flips the image horizontally and converts the image from RGB to BGR. This is because openCV reads the colors of a pixel in the order BGR
-    image.flags.writeable = False # To improve performance, optionally mark the image as not writeable to pass by reference
-    results = hands.process(image)
-
-    # Draw the hand annotations on the image.
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) 
+    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) # flips the image vertically and converts the image from BGR to RGB. This is because mediaPipe uses RGB values
+    image.flags.writeable = False # to improve performance we mark the image as not writeable to pass by reference
     
-    if results.multi_hand_landmarks:
-      for hand_landmarks in results.multi_hand_landmarks:
-        mp_drawing.draw_landmarks(
-            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-          
+    results = hands.process(image) # processes a RGB image and returns the hand land marks detected in a tuple called 'multi_hand_landmarks'
+
+    
+    # --- Draw the hand annotations on the image ---
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # we then convert the image back into BGR because openCV uses BGR
+    
+    if results.multi_hand_landmarks: # if the hand landmark model has found a hand                            
+      for hand_landmarks in results.multi_hand_landmarks:       
+        mp_drawing.draw_landmarks(                              
+            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
             
-      #move the mouse
+      # --- move the mouse ---
       mouseX_offset = window_size_x * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2) # It's the multiplication of 2 that makes the program able to reach the corners
       mouseY_offset = window_size_y * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2)
 
