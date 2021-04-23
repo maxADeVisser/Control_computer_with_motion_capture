@@ -17,7 +17,7 @@ log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log
 mp_drawing = mp.solutions.drawing_utils # the 'drawing' of the handdetection model. 
 mp_hands = mp.solutions.hands # initializing MediaPipes hand landmark model
 
-screen_size = pyautogui.size() #returns screen resolution as a tuple list: [x-cordinate, y-coordinate]
+screen_size = pyautogui.size() #returns screen resolution as a tuple: [x-cordinate, y-coordinate]
 window_size_x = screen_size[0] # a variable to represent the screen width
 window_size_y = screen_size[1] # a variable to represent the screen height
 # OBS: PyAutoGui sees the screen as a cartesian coordinate-system with the origin (0,0) being the upper left corner
@@ -26,7 +26,7 @@ window_size_y = screen_size[1] # a variable to represent the screen height
 cap = cv2.VideoCapture(0) #instanciates a VideoCapture object needed for capturing live video from webcam (0 is usually the build-in camera). 
 # OBS: If using an external webcamera, try different numbers (1, 2, 3 etc.)
 
-r = sr.Recognizer() # Initialize the speech-recognizer 
+r = sr.Recognizer() # Initialize the speech-recognizer
 
 with mp_hands.Hands( # with-statement ensures we handle possible exceptions thrown
     max_num_hands = 1, # Declares how many hands the model will track at once.
@@ -42,7 +42,6 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
       print("Ignoring empty camera frame.")
       continue
 
-    # Flip the image horizontally for a later selfie-view display, and convert the BGR image to RGB.
     image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB) #flips the image horizontally and converts the image from RGB to BGR. This is because openCV reads the colors of a pixel in the order BGR
     image.flags.writeable = False # To improve performance, optionally mark the image as not writeable to pass by reference
     results = hands.process(image)
