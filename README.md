@@ -31,7 +31,7 @@ To enter speech to text move your index finger away from your middle finger like
 
 ## Voice-commands
 Commands you can say:
-                **Enter:**             Press enter
+               ** **Enter:** **            Press enter
                 
                 **Delete:**            Delete one word
                 
