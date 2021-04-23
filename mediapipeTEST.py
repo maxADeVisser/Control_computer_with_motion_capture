@@ -57,8 +57,13 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
             image, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
             
       # --- move the mouse ---
-      mouseX_offset = window_size_x * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2) # It's the multiplication of 2 that makes the program able to reach the corners
-      mouseY_offset = window_size_y * (hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2)
+      # NOTE.: we must create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
+      # Mediapipe normalizes the width an height to a value between 0 and 1, whereas pyAutoGui perceives the pixel resolution of the screen
+      # Therefore we create a offset such that the two libraries can talk to eachother.
+      # And finally we multiply with 
+      mouseX_offset = window_size_x * hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
+      mouseY_offset = window_size_y * hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2 
+      
 
       middle_finger_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * mouseX_offset
       middle_finger_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * mouseY_offset
