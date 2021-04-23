@@ -55,19 +55,12 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
       for hand_landmarks in results.multi_hand_landmarks:       
         mp_drawing.draw_landmarks(                              
             image, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
-            
-      # --- move the mouse ---
+     
+      # ------------ GETTING POSITIONS USED -------------------
+      # Middle finger mcp position
       middle_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x 
       middle_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y
     
-      # NOTE.: we create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
-      mouseX_offset = window_size_x * middle_finger_posX * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
-      mouseY_offset = window_size_y * middle_finger_posY * 2 
-     
-      middle_finger_mcp_posX = middle_finger_posX * mouseX_offset
-      middle_finger_mcp_posY = middle_finger_posY * mouseY_offset
-      pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
-      
       # Index finger tip position
       index_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
       index_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
@@ -95,6 +88,16 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
       # Pinky tip position
       pinky_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].x
       pinky_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].y
+        
+      # --------------------- ACTIONS ------------------------
+      # move the mouse
+      # NOTE.: we create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
+      mouseX_offset = window_size_x * middle_finger_posX * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
+      mouseY_offset = window_size_y * middle_finger_posY * 2 
+     
+      middle_finger_mcp_posX = middle_finger_posX * mouseX_offset
+      middle_finger_mcp_posY = middle_finger_posY * mouseY_offset
+      pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
 
       # Left click 
       left_click_dist = round(distance.euclidean([thumb_posX, thumb_posY], [index_finger_mcp_posX, index_finger_mcp_posY]), 3)
