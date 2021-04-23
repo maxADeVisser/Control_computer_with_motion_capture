@@ -31,11 +31,11 @@ To enter speech to text move your index finger away from your middle finger like
 
 ## Voice-commands
 Commands you can say:
-                **Enter:**             Presse enter
+                **Enter:**             Press enter
                 **Delete:**            Delete one word
                 **Single delete:**     Delete one letter
                 **Clear:**             Delete one line
-                **Space:**             Presse the space bar
+                **Space:**             Press the space bar
                 **Exit:** or **Quit:** Close the program
 
 Commands you can use to type a symbol:
