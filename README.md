@@ -6,12 +6,7 @@ The aim with this project is to explore interacting with a computer through hand
 
 ## Usage
 Make sure you have MediaPipe (and OpenCV), PyAutoGUI and PyAudio (if you want speech to text functionality) installed. 
-Install by running the requirements.txt or by using the following commands in the commandline:
-```
-pip3 install mediapipe
-pip3 install pyautogui
-pip3 install opencv-python
-```
+Install by running the requirements.txt
 
 ### Hand-commands
 Hold your hand hand aproximately 30 - 50 cm from your webcam/screen. This is your starting position: 
@@ -34,10 +29,19 @@ To enter speech to text move your index finger away from your middle finger like
 
 ![Speech](https://user-images.githubusercontent.com/70689092/115692333-2d2bd500-a35f-11eb-81ed-e3775c836bd4.gif)
 
-### Voice-commands
-Commands to use while speaking:
-                Question Point:
-                Period: 
-1) After speech to text activation, wait one second.
+## Voice-commands
+Commands you can say:
+                **Enter:**             Presse enter
+                **Delete:**            Delete one word
+                **Single delete:**     Delete one letter
+                **Clear:**             Delete one line
+                **Space:**             Presse the space bar
+                **Exit:** or **Quit:** Close the program
+
+Commands you can use to type a symbol:
+                **Question Point:**    Put a question mark at the end of the sentence.
+                **Period:**            Put a dot at the end of the sentence.
+
+1) After speech to text activation
 2) Say what you want to type.
 3) Followed by what voice-command you need.
