@@ -57,12 +57,15 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
             image, hand_landmarks, mp_hands.HAND_CONNECTIONS)     
             
       # --- move the mouse ---
-      # NOTE.: we must create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
-      mouseX_offset = window_size_x * hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
-      mouseY_offset = window_size_y * hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * 2 
+      middle_finger_posX = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x 
+      middle_finger_posY = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y
+    
+      # NOTE.: we create a mouse offset since pyAutoGui and MediaPipe perceives the screen size differently.
+      mouseX_offset = window_size_x * middle_finger_posX * 2 #It's the multiplication of 2 that makes the program able to reach the outer sides of the screen 
+      mouseY_offset = window_size_y * middle_finger_posY * 2 
      
-      middle_finger_mcp_posX = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * mouseX_offset
-      middle_finger_mcp_posY = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * mouseY_offset
+      middle_finger_mcp_posX = middle_finger_posX * mouseX_offset
+      middle_finger_mcp_posY = middle_finger_posY * mouseY_offset
       pyautogui.moveTo(middle_finger_mcp_posX, middle_finger_mcp_posY, 0.1) # 0.1 makes mouse update in a smoother manor
       
       # Index finger tip position
