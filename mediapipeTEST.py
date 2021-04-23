@@ -177,7 +177,8 @@ with mp_hands.Hands( # with-statement ensures we handle possible exceptions thro
         print('Scroll up')
 
     # cv2.imshow('MediaPipe Hands', image) # shows the webcamera to the screen when the application is running
-    if cv2.waitKey(5) & 0xFF == 27:
+    
+    if cv2.waitKey(5) & 0xFF == 27: # if the escape key is pressed, the application closes
       break
 
 cap.release()
