@@ -11,8 +11,8 @@ import logging as log
 import speech_recognition as sr
 
 #logging format
-log.basicConfig(filename='Kopi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests everytime the program is ran
-#log.basicConfig(filename='Kopi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #This line can be used instead if we want to make new logfiles each time
+log.basicConfig(filename='Copi.log', filemode= 'w' , encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #Makes a log file that resests everytime the program is ran
+#log.basicConfig(filename='Copi.log', encoding='utf-8', level=log.DEBUG, format='%(asctime)s %(message)s') #This line can be used instead if we want to make new logfiles each time
 
 mp_drawing = mp.solutions.drawing_utils # the 'drawing' of the handdetection model. 
 mp_hands = mp.solutions.hands # initializing MediaPipes hand landmark model
